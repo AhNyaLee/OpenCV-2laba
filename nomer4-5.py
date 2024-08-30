@@ -19,7 +19,7 @@ for contour in contours:
         cX = int(M["m10"] / M["m00"])
         cY = int(M["m01"] / M["m00"])
 
-        print(f"Центр масс для контура: ({cX}, {cY})")
+      
 
 cv2.imshow('res', img_contours) # выводим итоговое изображение в окно
 
