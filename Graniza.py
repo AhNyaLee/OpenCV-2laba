@@ -1,15 +1,17 @@
 import cv2
-
-photo=cv2.imread('i.jpg.')
-gray=cv2.cvtColor(photo, cv2.COLOR_BGR2GRAY)
-gray=cv2.GaussianBlur(gray,(3,3),0)
-cv2.imwrite("i_test.jpg", gray)
-
-edges=cv2.Canny(gray,10,200)
-cv2.imwrite("edges_test.jpg", edges)
-
-kernel=cv2.getStructuringElement(cv2.MORPH_RECT,(7,7))
-closed=cv2.morphologyEx(edges,cv2.MORPH_CLOSE, kernel)
-cv2.imwrite("closed_test.jpg",closed)
-
-COUNTS=cv2.findContours(closed.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+img = cv2.imread('test.png')
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+ret,thresh = cv2.threshold(gray,150,255,0)
+contours,hierarchy = cv2.findContours(thresh, cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+print("Number of Contours detected:",len(contours))
+for i, cnt in enumerate(contours):
+   M = cv2.moments(cnt)
+   print(f"Moments of Contour {i+1}:\n", M)
+   area = cv2.contourArea(cnt)
+   print(f"Площадь: {area}")
+   img1 = cv2.drawContours(img, [cnt], -1, (0,255,255), 3)
+   x1, y1 = cnt[0, 0]
+   cv2.putText(img1, f'Contour:{i + 1}', (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+cv2.imshow("Contours", img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()

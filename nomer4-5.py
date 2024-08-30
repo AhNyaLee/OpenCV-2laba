@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-my_photo = cv2.imread('i.jpg')
+my_photo = cv2.imread('test1.jpg')
 filterd_image  = cv2.medianBlur(my_photo,7)
 img_grey = cv2.cvtColor(filterd_image,cv2.COLOR_BGR2GRAY)
 ret,thresh_img = cv2.threshold(img_grey, 100, 255, cv2.THRESH_BINARY)
@@ -29,5 +29,7 @@ total_area = 0
 for contour in contours:
     area = cv2.contourArea(contour)
     total_area += area
-
+cnt = contours[0]
+M = cv2.moments(cnt)
+print("Moments of first contour:", M)
 print(f"Общая площадь всех объектов: {total_area}")
