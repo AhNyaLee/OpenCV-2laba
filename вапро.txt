@@ -1,0 +1,60 @@
+import cv2
+import numpy as np
+video=cv2.VideoCapture(0)
+kernel = np.ones((6, 6), np.uint8)
+hsv_min = np.array([0, 0, 0], np.uint8)
+hsv_max = np.array([0, 30, 255], np.uint8)
+while True:
+    ok,img=video.read()
+    hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    thresh = cv2.inRange(hsv_img, hsv_min, hsv_max)
+    result = cv2.bitwise_and(hsv_img,  hsv_img, mask=thresh)
+    img_erosion = cv2.erode(result, kernel, iterations=2)
+    img_dilation = cv2.dilate(result, kernel, iterations=1)
+    if not ok:
+        print("удалось прочитать кадр ")
+        break
+    else:
+        cv2.imshow('treshold', result)
+        cv2.imshow('Erosion', img_erosion)
+        cv2.imshow('Dilation', img_dilation)
+    if cv2.waitKey(1) & 0xFF == 27:
+        cv2.destroyAllWindows()
+        break
+
+_______________-----------------------=========================================================
+import cv2
+import numpy as np
+
+# Загрузка изображения
+image = cv2.imread('path_to_your_image.jpg')
+
+# Преобразование изображения в градации серого
+gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+import cv2
+import numpy as np
+
+# Загрузка изображения
+image = cv2.imread('path_to_your_image.jpg')
+
+# Преобразование изображения в градации серого
+gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+# Поиск контуров
+contours, _ = cv2.findContours(gray_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+# Нахождение моментов первого порядка для каждого контура
+for contour in contours:
+    M = cv2.moments(contour)
+    
+    # Проверка, что момент не нулевой (т.е., контур достаточно большой)
+    if M["m00"] != 0:
+        cX = int(M["m10"] / M["m00"])
+        cY = int(M["m01"] / M["m00"])
+        
+        print(f"Центр масс для контура: ({cX}, {cY})")
+total_area = 0
+for contour in contours:
+    area = cv2.contourArea(contour)
+    total_area += area
+    
+print(f"Общая площадь всех объектов: {total_area}")
